@@ -80,6 +80,8 @@ author: JustinGao
 * plot_corr       -- 变量相关性可视化
 * corr_mapping    -- 变量强相关性映射
 * forward_delete_corr -- 逐个剔除相关性高的变量
+* forward_delete_corr_ivfirst  -- 逐个剔除相关性高的变量（考虑IV大小）
+* forward_delete_corr_xgboostfirst  -- 逐个剔除相关性高的变量（考虑xgb或者rf）
 * forward_delete_pvalue -- 显著性筛选（向前选择法）
 * forward_delete_coef   -- 逻辑回归系数符号筛选（每个变量的系数符号需要一致）
 

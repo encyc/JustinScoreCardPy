@@ -183,3 +183,88 @@ def forward_delete_coef(x_train,y_train):
                            'coef':lr.coef_[0]})
     return coef_col,lr_coe
 
+
+# 相关性剔除（考虑IV）
+def forward_delete_corr_ivfirst(df,col_list,iv_rank,threshold=0.5):
+    '''
+    df: 数据集
+    col_list: 变量list
+    iv_rank: 变量的IV的list
+    threshold: corr的筛选阈值
+    
+    return: 考虑了IV的大小之后，筛选出来的变量list
+    '''    
+    def up_triangle(df,col_list,iv_rank,threshold=0.5):
+        '''
+        like above
+        '''
+        #initial 
+        list_corr = col_list[:]
+        #计算变量之间的corr并存表
+        corr_df = df.loc[:,col_list].corr()        
+        #遍历corr_df的所有corr
+        for col in list_corr:   
+            for row in list_corr:
+                corr = corr_df.loc[row,col]
+                #记录横纵变量的iv
+                iv_col = (iv_rank[iv_rank['col'] == col]['iv']).values
+                iv_row = (iv_rank[iv_rank['col'] == row]['iv']).values
+                #判断
+                if corr > threshold and col != row:
+                    if iv_col > iv_row:
+                        list_corr.remove(row)
+                        #print('delete %s %s > %s' %(row,iv_col,iv_row))
+                    elif iv_col <= iv_row:
+                        list_corr.remove(row)
+                        #print('delete %s %s > %s' %(row,iv_col,iv_row))
+                        break #如果删除了row，则没办法继续for循环，所以要break
+        return list_corr
+    
+    once = up_triangle(df, col_list, iv_rank =iv_rank, threshold = threshold)
+    twice = up_triangle(df, once, iv_rank =iv_rank, threshold = threshold)
+    return twice
+
+
+# 相关性剔除（考虑xgboost_imp or rf_imp）
+def forward_delete_corr_impfirst(df,col_list,fea_imp,threshold=0.5):
+    '''
+    df: 数据集
+    col_list: 变量list
+    fea_imp: 变量的imp的list,
+             可为xgboost:xg_fea_imp
+             ramdomforest:rf_fea_imp
+    threshold: corr的筛选阈值
+    
+    return: 考虑了imp的大小之后，筛选出来的变量list
+    '''    
+    def up_triangle(df,col_list,fea_imp,threshold):
+        '''
+        like above
+        '''
+        #initial 
+        list_corr = col_list[:]
+        #计算变量之间的corr并存表
+        corr_df = df.loc[:,col_list].corr()        
+        #遍历corr_df的所有corr
+        for col in list_corr:   
+            for row in list_corr:
+                corr = corr_df.loc[row,col]
+                #记录横纵变量的iv
+                imp_col = (fea_imp[fea_imp['col'] == col]['imp']).values
+                imp_row = (fea_imp[fea_imp['col'] == row]['imp']).values
+                #判断
+                if corr > threshold and col != row:
+                    if imp_col > imp_row:
+                        list_corr.remove(row)
+                        #print('delete %s %s > %s' %(row,iv_col,iv_row))
+                    elif imp_col <= imp_row:
+                        list_corr.remove(row)
+                        #print('delete %s %s > %s' %(row,iv_col,iv_row))
+                        break #如果删除了row，则没办法继续for循环，所以要break
+        return list_corr
+    
+    once = up_triangle(df, col_list, fea_imp, threshold)
+    twice = up_triangle(df, once, fea_imp, threshold)
+    return twice
+
+
