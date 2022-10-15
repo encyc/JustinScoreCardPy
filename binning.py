@@ -2,7 +2,6 @@
 # coding: utf-8
 
 # In[ ]:
-import JustinScoreCardPy as sc
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,14 +11,14 @@ from scipy.stats import spearmanr
 
 # 变量分箱
 
-# 类别性变量的分箱 
+# 类别性变量的分箱
 def binning_cate(df,col_list,target):
     """
     df:数据集
     col_list:变量list集合
     target:目标变量的字段名
-    
-    return: 
+
+    return:
     bin_df :list形式，里面存储每个变量的分箱结果
     iv_value:list形式，里面存储每个变量的IV值
     """
@@ -69,7 +68,7 @@ def iv_cate(df,col_list,target):
     df:数据集
     col_list:变量list集合
     target:目标变量的字段名
-    
+
     return:变量的iv明细表
     """
     bin_df,iv_value = binning_cate(df,col_list,target)
@@ -79,7 +78,7 @@ def iv_cate(df,col_list,target):
     return iv_df
 
 
-# 数值型变量的分箱 
+# 数值型变量的分箱
 
 # 先用卡方分箱输出变量的分割点
 def split_data(df,col,split_num):
@@ -103,7 +102,7 @@ def assign_group(x,split_bin):
     split_bin:split_data得出的分割点list
     """
     n = len(split_bin)
-    if x<=min(split_bin):   
+    if x<=min(split_bin):
         return min(split_bin) # 如果x小于分割点的最小值，则x映射为分割点的最小值
     elif x>max(split_bin): # 如果x大于分割点的最大值，则x映射为分割点的最大值
         return 10e10
@@ -174,7 +173,7 @@ def ChiMerge(df,col,target,max_bin=5,min_binpct=0):
     (dict_bad,regroup,all_bad_rate) = bin_bad_rate(df2,'col_map',target,grantRateIndicator=1)
     col_map_unique = sorted(list(set(df2['col_map'])))  # 对变量映射后的value进行去重排序
     group_interval = [[i] for i in col_map_unique]  # 对col_map_unique中每个值创建list并存储在group_interval中
-    
+
     while (len(group_interval)>max_bin): # 当group_interval的长度大于max_bin时，执行while循环
         chi_list=[]
         for i in range(len(group_interval)-1):
@@ -191,7 +190,7 @@ def ChiMerge(df,col,target,max_bin=5,min_binpct=0):
     group_interval = [sorted(i) for i in group_interval]
     # cutoff点为每个区间的最大值
     cutoffpoints = [max(i) for i in group_interval[:-1]]
-    
+
     # 检查是否有箱只有好样本或者只有坏样本
     df2['col_map_bin'] = df2['col_map'].apply(lambda x:assign_bin(x,cutoffpoints)) # 将col_map映射为对应的区间Bin
     # 计算每个区间的违约率
@@ -209,11 +208,11 @@ def ChiMerge(df,col,target,max_bin=5,min_binpct=0):
         else:
             bad01_bin_index = list(regroup.col_map_bin).index(bad01_bin) # 找出bad01_bin的索引
             prev_bin = list(regroup.col_map_bin)[bad01_bin_index-1] # bad01_bin前一个区间
-            df3 = df2[df2.col_map_bin.isin([prev_bin,bad01_bin])] 
+            df3 = df2[df2.col_map_bin.isin([prev_bin,bad01_bin])]
             (dict_bad,regroup1) = bin_bad_rate(df3,'col_map_bin',target)
             chi1 = cal_chi2(regroup1,all_bad_rate)  # 计算前一个区间和bad01_bin的卡方值
             later_bin = list(regroup.col_map_bin)[bad01_bin_index+1] # bin01_bin的后一个区间
-            df4 = df2[df2.col_map_bin.isin([later_bin,bad01_bin])] 
+            df4 = df2[df2.col_map_bin.isin([later_bin,bad01_bin])]
             (dict_bad,regroup2) = bin_bad_rate(df4,'col_map_bin',target)
             chi2 = cal_chi2(regroup2,all_bad_rate) # 计算后一个区间和bad01_bin的卡方值
             if chi1<chi2:  # 当chi1<chi2时,删除前一个区间对应的cutoff点
@@ -224,12 +223,12 @@ def ChiMerge(df,col,target,max_bin=5,min_binpct=0):
         (dict_bad,regroup) = bin_bad_rate(df2,'col_map_bin',target)
         # 重新将col_map映射至区间，并计算最小和最大的违约率，直达不再出现违约率为0或1的情况，循环停止
         [min_bad_rate,max_bad_rate] = [min(dict_bad.values()),max(dict_bad.values())]
-    
+
     # 检查分箱后的最小占比
     if min_binpct>0:
         group_values = df2['col_map'].apply(lambda x:assign_bin(x,cutoffpoints))
         df2['col_map_bin'] = group_values # 将col_map映射为对应的区间Bin
-        group_df = group_values.value_counts().to_frame() 
+        group_df = group_values.value_counts().to_frame()
         group_df['bin_pct'] = group_df['col_map']/n # 计算每个区间的占比
         min_pct = group_df.bin_pct.min() # 得出最小的区间占比
         while min_pct<min_binpct and len(cutoffpoints)>2: # 当最小的区间占比小于min_pct且cutoff点的个数大于2，执行循环
@@ -266,7 +265,7 @@ def binning_num(df,target,col_list,n=10,max_bin=None,min_binpct=None,method=None
     min_binpct:区间内样本所占总体的最小比
     method:分箱方式（freq,count,ChiMerge(default),cart)
     leaf_stop_percent:叶子节点占比，作为停止条件，默认5%()
-    
+
     return:
     bin_df :list形式，里面存储每个变量的分箱结果
     iv_value:list形式，里面存储每个变量的IV值
@@ -286,7 +285,7 @@ def binning_num(df,target,col_list,n=10,max_bin=None,min_binpct=None,method=None
         elif method == 'count': #等距分箱
             bucket = pd.cut(df[col],n)
         elif method == 'cart':  #决策树cart
-            cut = sc.binning_function.get_cart_bincut(df, col, target, leaf_stop_percent=leaf_stop_percent)
+            cut = binning_function.get_cart_bincut(df, col, target, leaf_stop_percent=leaf_stop_percent)
             bucket = pd.cut(df[col],cut)
         elif method == 'monotonic':
             r = 0
@@ -301,7 +300,7 @@ def binning_num(df,target,col_list,n=10,max_bin=None,min_binpct=None,method=None
             print(bucket)
         elif method == 'ChiMerge':  #卡方
             cut = ChiMerge(df,col,target,max_bin=max_bin,min_binpct=min_binpct)
-            cut.insert(0,ninf)  
+            cut.insert(0,ninf)
             cut.append(inf)
             bucket = pd.cut(df[col],cut)
         d1 = df.groupby(bucket)
@@ -337,7 +336,7 @@ def binning_num(df,target,col_list,n=10,max_bin=None,min_binpct=None,method=None
         bin_df.append(d2)
         iv_value.append(iv)
         d2.reset_index(inplace=True)
-        
+
     return bin_df,iv_value
 
 
@@ -348,7 +347,7 @@ def binning_num_manual(df,target,col,cut):
     target:目标变量的字段名
     col:变量名
     cut:断点list
-    
+
     return:
     bin_df :list形式，里面存储变量的分箱结果
     iv_value:list形式，里面存储每个变量的IV值
@@ -400,7 +399,7 @@ def binning_num_manual(df,target,col,cut):
     bin_df.append(d2)
     iv_value.append(iv)
     d2.reset_index(inplace=True)
-        
+
     return bin_df,iv_value
 
 
@@ -413,7 +412,7 @@ def iv_num(df,target,col_list,max_bin=None,min_binpct=None):
     col_list:变量list集合
     max_bin:最大的分箱个数
     min_binpct:区间内样本所占总体的最小比
-    
+
     return :变量的iv明细表
     """
     bin_df,iv_value = binning_num(df,target,col_list,max_bin=max_bin,min_binpct=min_binpct)
@@ -430,8 +429,8 @@ def binning_self(df,col,target,cut=None,right_border=True):
     col:分箱的单个变量名
     cut:划分区间的list
     right_border：设定左开右闭、左闭右开
-    
-    return: 
+
+    return:
     bin_df: df形式，单个变量的分箱结果
     iv_value: 单个变量的iv
     """
@@ -483,7 +482,7 @@ def plot_woe(bin_df,hspace=0.4,wspace=0.4,plt_size=None,plt_num=None,x=None,y=No
     plt_num :子图的数量
     x :子图矩阵中一行子图的数量
     y :子图矩阵中一列子图的数量
-    
+
     return :每个变量的woe变化趋势图
     """
     plt.figure(figsize=plt_size)
@@ -499,11 +498,11 @@ def plot_woe(bin_df,hspace=0.4,wspace=0.4,plt_size=None,plt_num=None,x=None,y=No
     return plt.show()
 
 
-# 检验woe是否单调 
+# 检验woe是否单调
 def woe_monoton(bin_df):
     """
     bin_df:list形式，里面存储每个变量的分箱结果
-    
+
     return :
     woe_notmonoton_col :woe没有呈单调变化的变量，list形式
     woe_judge_df :df形式，每个变量的检验结果
@@ -538,7 +537,7 @@ def woe_monoton(bin_df):
 def woe_large(bin_df):
     """
     bin_df:list形式，里面存储每个变量的分箱结果
-    
+
     return:
     woe_large_col: 某个区间woe大于1的变量，list集合
     woe_judge_df :df形式，每个变量的检验结果
