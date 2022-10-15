@@ -5,12 +5,12 @@
 
 # In[ ]:
 
+import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib.pyplot as plt    
-
 from sklearn import metrics
 from sklearn.model_selection import cross_val_score
- 
+
+
 # 模型评估
 
 # AUC 

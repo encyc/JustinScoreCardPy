@@ -4,18 +4,15 @@
 # In[ ]:
 
 
-# 变量筛选 
+import matplotlib.pyplot as plt
+# 变量筛选
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 import seaborn as sns
-
-from sklearn.ensemble import RandomForestClassifier
-from xgboost import XGBClassifier
-
-from sklearn.linear_model import LogisticRegression 
-from sklearn.model_selection import train_test_split
 import statsmodels.api as sm
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from xgboost import XGBClassifier
 
 
 # xgboost筛选变量 

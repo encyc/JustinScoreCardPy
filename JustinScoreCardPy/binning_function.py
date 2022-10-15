@@ -6,10 +6,10 @@ Created on Tue Sep 13 13:47:14 2022
 """
 
 
-import pandas as pd
-import numpy as np
-import random
 import math
+
+import numpy as np
+import pandas as pd
 from scipy.stats import chi2
 from scipy.stats import spearmanr
 

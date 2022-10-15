@@ -1,10 +1,10 @@
 
 # coding: utf-8
 
+import matplotlib.pyplot as plt
 # In[ ]:
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
 
 # 绘制变量的得分占比偏移图

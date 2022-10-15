@@ -1,11 +1,12 @@
 
 # coding: utf-8
 
+import matplotlib.pyplot as plt
+import numpy as np
 # In[ ]:
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestRegressor
+
 
 # 数据预处理
 

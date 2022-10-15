@@ -1,24 +1,17 @@
+import matplotlib.pyplot as plt
 import numpy as np
 from numpy import unique
 from numpy import where
-from sklearn.datasets import make_classification
-import matplotlib.pyplot as plt
-
-
-from sklearn.cluster import AffinityPropagation          #亲和力传播
-from sklearn.cluster import AgglomerativeClustering      #聚合
-from sklearn.cluster import Birch                        #BIRCH
-from sklearn.cluster import DBSCAN                       #DBSCAN
-from sklearn.cluster import KMeans                       #K-Means
-from sklearn.cluster import MiniBatchKMeans              #Mini-Batch K-Means
-from sklearn.cluster import MeanShift                    #均值漂移
-from sklearn.cluster import OPTICS                       #OPTICS
-from sklearn.cluster import SpectralClustering           #光谱聚合
-from sklearn.mixture import GaussianMixture              #高斯模糊
-
-
-
-
+from sklearn.cluster import AffinityPropagation  # 亲和力传播
+from sklearn.cluster import AgglomerativeClustering  # 聚合
+from sklearn.cluster import Birch  # BIRCH
+from sklearn.cluster import DBSCAN  # DBSCAN
+from sklearn.cluster import KMeans  # K-Means
+from sklearn.cluster import MeanShift  # 均值漂移
+from sklearn.cluster import MiniBatchKMeans  # Mini-Batch K-Means
+from sklearn.cluster import OPTICS  # OPTICS
+from sklearn.cluster import SpectralClustering  # 光谱聚合
+from sklearn.mixture import GaussianMixture  # 高斯模糊
 
 
 #亲和力传播

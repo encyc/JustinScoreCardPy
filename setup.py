@@ -8,7 +8,7 @@ setup(
         'numpy >= 1.20',
         'pandas',
         'scipy',
-        'matplotlob',
+        'matplotlib',
         'seaborn',
         'sklearn',
         'xgboost',

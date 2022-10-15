@@ -1,14 +1,17 @@
 
 # coding: utf-8
 
+import math
+
+import matplotlib.pyplot as plt
+import numpy as np
 # In[ ]:
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import math
 import seaborn as sns
 from scipy.stats import spearmanr
+
 import JustinScoreCardPy as sc
+
 
 # 变量分箱
 

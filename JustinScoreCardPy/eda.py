@@ -4,8 +4,9 @@
 # In[ ]:
 
 import matplotlib.pyplot as plt
-import seaborn as sns
 import pandas as pd
+import seaborn as sns
+
 
 # EDA分析
 
