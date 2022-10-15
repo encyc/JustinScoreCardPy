@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import math
 import seaborn as sns
 from scipy.stats import spearmanr
+import JustinScoreCardPy as sc
 
 # 变量分箱
 
@@ -285,7 +286,7 @@ def binning_num(df,target,col_list,n=10,max_bin=None,min_binpct=None,method=None
         elif method == 'count': #等距分箱
             bucket = pd.cut(df[col],n)
         elif method == 'cart':  #决策树cart
-            cut = binning_function.get_cart_bincut(df, col, target, leaf_stop_percent=leaf_stop_percent)
+            cut = sc.binning_function.get_cart_bincut(df, col, target, leaf_stop_percent=leaf_stop_percent)
             bucket = pd.cut(df[col],cut)
         elif method == 'monotonic':
             r = 0
