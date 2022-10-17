@@ -4,18 +4,21 @@
 # In[ ]:
 
 
+import random
+
 import matplotlib.pyplot as plt
 # 变量筛选
 import numpy as np
 import pandas as pd
 import seaborn as sns
 import statsmodels.api as sm
+from sklearn import metrics
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from xgboost import XGBClassifier
 
 
-# xgboost筛选变量 
+# xgboost筛选变量
 def select_xgboost(df,target,imp_num=None):
     """
     df:数据集
@@ -265,3 +268,103 @@ def forward_delete_corr_impfirst(df,col_list,fea_imp,threshold=0.5):
     return twice
 
 
+#depth_first_search
+
+def depth_first_search(x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test, col_list, col_initial, loop_num, length)：
+    """
+    x_train: 训练集x
+    y_train: 训练集target
+    x_test: 测试集x
+    y_test: 测试集target
+    col_list: 参与搜索的变量list
+    col_initial: 参与搜索的变量list的启动list
+    loop_num: 希望搜索的次数
+    length: 希望搜索的变量list的长度
+    """
+    j = 0
+    coef = []
+    intercept = []
+    ks_list = []
+    roc_list = []
+    col_func = []
+    col_pvalue_delete_list = []
+    lr_list = []
+    col_corr_delete_list = []
+    coef_col_list = []
+    lr_coe_list = []
+
+
+    while j < loop_num:
+        b = ''
+                col = col_initial
+        # model_outside = LogisticRegression()
+        while len(col) < length:
+            # print(len(col))
+            a = random.choice(col_list)
+            # print(a)
+            if b == a:
+                # print('b == a')
+                a = random.choice(col_list)
+                # print(a)
+                col.append(a)
+                col = list(set(col))
+                b = a
+            else:
+                # print('b <> a')
+                col.append(a)
+                col = list(set(col))
+                b = a
+            # print(col)
+
+        # 用逻辑回归训练model,默认最大迭代100次，可能会超出限制，建议多设置一点
+        model = LogisticRegression(max_iter=3000)
+        model.fit(x_train[col], y_train)
+        # y_pred用predict_proba，因为模型整体能力较弱，基本只有0.5一下的比率
+        y_pred = model.predict_proba(x_test[col])[:, 1]
+        # ROC
+        roc = metrics.roc_auc_score(y_test, y_pred)
+        roc_list.append(roc)
+        # KS
+        ks_max = model_evaluation.model_ks(y_test, y_pred)
+        print(col, ks_max, roc)
+
+        '''
+        #筛选p-value
+        col_pvalue_delete,lr = forward_delete_pvalue(df[col],df['dlq_flag'])
+        col_pvalue_delete_list.append(col_pvalue_delete)
+        lr_list.append(lr)
+    
+        #筛选corr
+        col_corr_delete = forward_delete_corr(df,col_list,threshold=0.6)
+        col_corr_delete_list.append(col_corr_delete)
+    
+        #筛选woe系数
+        coef_col,lr_coe = forward_delete_coef(df[col],df['dlq_flag'])
+        coef_col_list.append(list(set(lr_coe['col'])))
+        lr_coe_list.append(list(set(lr_coe['coef'])))
+        '''
+
+        # 记录coef
+        coef.append(model.coef_[0])
+        # 记录intercept
+        intercept.append(model.intercept_[0])
+        # 记录ks_max
+        ks_list.append(ks_max)
+        # 记录col
+        col_func.append(col)
+
+        j = j + 1
+        print(j)
+
+    ks_col_list = pd.DataFrame({'col_list': col_func,
+                                'ks_list': ks_list,
+                                'ROC': roc_list,
+                                'intercept': intercept,
+                                'coef': coef,
+                                #                            'col_pvalue_delete_list': col_pvalue_delete_list,
+                                #                            'lr_list':lr_list,
+                                #                            'col_corr_delete_list': col_corr_delete_list,
+                                #                            'coef_col_list': coef_col_list,
+                                #                            'lr_coe': lr_coe_list,
+                                })
+    return ks_col_list

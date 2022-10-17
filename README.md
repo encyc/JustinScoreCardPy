@@ -84,7 +84,7 @@ author: JustinGao
 * forward_delete_corr_impfirst  -- 逐个剔除相关性高的变量（考虑xgb或者rf）
 * forward_delete_pvalue -- 显著性筛选（向前选择法）
 * forward_delete_coef   -- 逻辑回归系数符号筛选（每个变量的系数符号需要一致）
-
+* depth_first_search    -- 暴力搜索特定组合的colist的ks，并组建叠加变量数量
 ### 7.woe_discrete.py
 * woe_df_concat -- 变量woe结果明细表
 * woe_transform -- 变量woe转换
@@ -114,4 +114,6 @@ author: JustinGao
 * plot_var_shift -- 变量偏移分析
 
 
-
+### 11.datamerchant_tools.py
+* weight_ks -- 计算加权之后的模型KS以及区间坏率
+* 
