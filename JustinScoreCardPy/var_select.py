@@ -296,7 +296,7 @@ def depth_first_search(x_train, y_train, x_test, y_test, col_list, col_initial, 
 
     while j < loop_num:
         b = ''
-                col = col_initial
+        col = col_initial
         # model_outside = LogisticRegression()
         while len(col) < length:
             # print(len(col))
