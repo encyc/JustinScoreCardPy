@@ -270,7 +270,7 @@ def forward_delete_corr_impfirst(df,col_list,fea_imp,threshold=0.5):
 
 #depth_first_search
 
-def depth_first_search(x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test, col_list, col_initial, loop_num, length)：
+def depth_first_search(x_train, y_train, x_test, y_test, col_list, col_initial, loop_num, length):
     """
     x_train: 训练集x
     y_train: 训练集target
@@ -287,11 +287,11 @@ def depth_first_search(x_train=x_train, y_train=y_train, x_test=x_test, y_test=y
     ks_list = []
     roc_list = []
     col_func = []
-    col_pvalue_delete_list = []
-    lr_list = []
-    col_corr_delete_list = []
-    coef_col_list = []
-    lr_coe_list = []
+    #col_pvalue_delete_list = []
+    #lr_list = []
+    #col_corr_delete_list = []
+    #coef_col_list = []
+    #lr_coe_list = []
 
 
     while j < loop_num:
