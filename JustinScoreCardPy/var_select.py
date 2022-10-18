@@ -17,6 +17,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from xgboost import XGBClassifier
 
+from JustinScoreCardPy import model_evaluation
 
 # xgboost筛选变量
 def select_xgboost(df,target,imp_num=None):
