@@ -7,6 +7,7 @@
 import random
 
 import matplotlib.pyplot as plt
+plt.style.use('science')
 # 变量筛选
 import numpy as np
 import pandas as pd

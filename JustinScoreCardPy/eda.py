@@ -4,6 +4,7 @@
 # In[ ]:
 
 import matplotlib.pyplot as plt
+plt.style.use('science')
 import pandas as pd
 import seaborn as sns
 

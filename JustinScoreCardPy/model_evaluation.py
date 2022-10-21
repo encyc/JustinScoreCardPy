@@ -6,6 +6,7 @@
 # In[ ]:
 
 import matplotlib.pyplot as plt
+plt.style.use('science')
 import numpy as np
 from sklearn import metrics
 from sklearn.model_selection import cross_val_score

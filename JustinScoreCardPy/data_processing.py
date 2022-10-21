@@ -2,6 +2,7 @@
 # coding: utf-8
 
 import matplotlib.pyplot as plt
+plt.style.use('science')
 import numpy as np
 # In[ ]:
 import pandas as pd

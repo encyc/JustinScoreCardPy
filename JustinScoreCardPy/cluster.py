@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+plt.style.use('science')
 import numpy as np
 from numpy import unique
 from numpy import where
