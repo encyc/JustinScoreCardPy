@@ -12,8 +12,8 @@ setup(
         'seaborn',
         'sklearn',
         'xgboost',
-        'statsmodels'
-
+        'statsmodels',
+        'SciencePlots'
     ]
 )
 
