@@ -14,7 +14,7 @@ setup(
         'xgboost',
         'statsmodels',
         'SciencePlots',
-        'latex'
+        'pylatex'
     ]
 )
 
