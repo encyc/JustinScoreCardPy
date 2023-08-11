@@ -13,7 +13,8 @@ setup(
         'sklearn',
         'xgboost',
         'statsmodels',
-        'SciencePlots'
+        'SciencePlots',
+        'latex'
     ]
 )
 
