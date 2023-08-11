@@ -10,7 +10,7 @@ setup(
         'scipy',
         'matplotlib',
         'seaborn',
-        'sklearn',
+        'scikit-learn',
         'xgboost',
         'statsmodels',
         'SciencePlots',
